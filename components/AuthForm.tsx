@@ -34,25 +34,24 @@ const AuthForm = ({ type }: { type: string }) => {
     const onSubmit = async (data: z.infer<typeof formSchema>) => {
         setIsLoading(true);
         
-        try {
-            if (type === 'sign-up') {
+        if (type === 'sign-up') {
+            try {
                 const userData = await signUp(data);
                 setUser(userData);
+            } catch (error) {
+                console.log(error);    
+            } finally {
+                setIsLoading(false);
             }
-            else if (type === 'sign-in') {
-                // const response = await signIn({
-                //     email: data.email,
-                //     password: data.password
-                // });
+        }
 
-                // if (response) router.push("/");
-            }
+        if (type === 'sign-in') {
+            const response = await signIn({
+                email: data.email,
+                password: data.password
+            });
 
-            console.log(data)
-        } catch (error) {
-            console.log(error);    
-        } finally {
-            setIsLoading(false);
+            if (response) router.push("/");
         }
     }
 
